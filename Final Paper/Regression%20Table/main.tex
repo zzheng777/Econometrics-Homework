@@ -1,0 +1,228 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+
+\title{Regression Table}
+\author{Ze Cheng Zheng, Bassel Abu-Halawa}
+\date{November 18, 2020}
+
+\begin{document}
+
+\maketitle
+
+
+
+
+\subsection{Original Table} 
+
+
+\subincludegraphics[scale=0.4]{Regression.png}
+
+
+\section{Replication Table}
+\begin{table}[!htbp] \centering 
+  \caption{Wage Shock Effects on Project Composition} 
+  \label{} 
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llll}\hline\hline
+\multicolumn{1}{l}{Regressor}&\multicolumn{1}{c}{I}&\multicolumn{1}{c}{II}&\multicolumn{1}{c}{III}\tabularnewline
+\hline
+Shock&0.014$^{}$&0.007$^{}$&0.008$^{}$\tabularnewline
+&{\scriptsize (0.015)}&{\scriptsize (0.015)}&{\scriptsize (0.015)}\tabularnewline
+Day&0.001$^{}$&0.001$^{}$&-0.003$^{}$\tabularnewline
+&{\scriptsize (0.0002)}&{\scriptsize (0.0002)}&{\scriptsize (0.001)}\tabularnewline
+Day$^2$&&&0.002$^{}$\tabularnewline
+&&&{\scriptsize (0.0004)}\tabularnewline
+District FEs&N&Y&Y\tabularnewline
+N&12103&12103&12103\tabularnewline
+$R^2$&0.046&0.097&0.098\tabularnewline
+\hline
+\end{tabular*}
+\end{table}
+Each observation is a panchayat-day. The dependent variable in all regressions is “FwdWageFrac”, the proportion of daily wage project-days in the panchayat in the next two months. “Shock” is an indicator equal to 1 on and after May 1, 2007. “Day” is a linear time trend; Day2 has been re-scaled by the mean of Day. All columns include a third-order polynomial in the day of the month and indicators for major agricultural seasons. Robust standard errors multi-way clustered by panchayat and day are presented in parenthesis. 
+\newline
+Statistical significance is denoted as: $*p < 0.10, **p < 0.05, ***p < 0.01$
+\newline
+\newline
+We were able to replicate almost exactly what the original table had. Due to the R code given to us being old, we had switched from using the ols function to lm function due to as.factor() function showing up an error with ols function. It kept on saying error because the parameters of the code were not right. Therefore we switch to using lm instead of ols which then caused our confidence intervals to change while everything else remained the same.  We also had to manually put in the data ourselves in the latex file due to mw2\_way, which was source code that helped match our variables data with the correct variables name using the varlabels df (data frame). Without the usage of mw2\_way, the \#output section of our code would be deemed useless. 
+\newline
+\newline
+If we did not have the code provided I believe that it would be not very difficult to replicate the regression table, due to the fact that we are doing a multi-linear regression. We would first read from the CSV in our files, then set a working directory equal to these CSV files so that we could pull from these files when we want to use them. Then we would just take the lm of the left-hand side variable to the right-hand side variables, which are the dependent variables, such as shock, day, day2 and the control variables, which were as.factor(did), holiday, res\_gender, res\_sbc, res\_tribe, season1, season2, dayofmonth, dayofmonth2, and dayofmonth3. We set working directory = TRUE in the parameters so that it will pull data from the working directory. We would then use stargazer to find our individual variables and then put them in the table. The difficult part would have been how to put the data together from various sources and cleaning it so that it can be used. If we did not have the cleaned data provided by the people it would have taken an extensive amount of time before even starting to code the items. The results would have been the same as the replication table we did above. 
+
+\subsection{Hypothesis Testing}
+$$\hat{y}_{pt}= \beta_0 + \beta_1(y_{pt}) + \beta_2(Shock_t) + T^{'}_t\gamma + R^{'}_p\zeta + \delta_{d(p)}  $$
+
+$B_0$ is constant, $B_1$ is day and day2, and $B_2$ is Shock
+\newline
+\newline
+For hypothesis testing we will define the null and alternative hypotheses as:
+\newline
+$$H_0: B_0 = 0,  B_1 = 0, B_2 = 0$$
+$$H_1: B_0 \neq 0, B_1 \neq 0, B_2 \neq 0$$
+
+For the first column (I) of the regression, our critical value is $1.64498$. For $B_0$ our t-value is $19.401$, $B_1$ (day) our t-value is $2.614$ and for $B_2$ (shock) our t-value is $0.924$. To reject our null hypothesis our t-value has to have greater than our critical value. Therefore since $B_0$ and $B_1$ rejects the null hypothesis and accepts the alternative hypothesis, there is a relationship between $\hat{y}_{pt}$, FwdWageFrac and days. For  $B_2$, however, we fail to reject the null due to sample not having enough evidence to prove or disprove a definite relationship. 
+
+For the second column (II) of the regression, our critical value is $1.64498$. For $B_0$ our t-value is $27.349$, $B_1$ (day) our t-value is $3.267$ and for $B_2$ (shock) our t-value is $0.498$. Therefore, since  $B_0$ and $B_1$ rejects the null hypothesis and accepts the alternative hypothesis, there is a relationship between $\hat{y}_{pt}$, FwdWageFrac, and day. For $B_2$, however, we fail to reject the null due to sample not having enough evidence to prove or disprove a definite relationship. 
+
+For the third column (III) of the regression, our critical value is $1.64498$. For $B_0$ our t-value is $22.375$, $B_1$ (day) our t-value is $3.533$, $B_1$(days) our t-value is $4.661$, and for $B_2$ (shock) our t-value is $0.542$. Therefore since $B_0$ and $B_1$ rejects the null hypothesis and accepts the alternative hypothesis, there is a relationship between $\hat{y}_{pt}$, FwdWageFrac, day, and day2. However, for $B_2$, we fail to reject the null due to sample not having enough evidence to prove or disprove a definite relationship. 
+
+From those three regression we can see there is a high significance level between panchayat-day and  $"FwdWageFrac"$, $Day$, and $Day^2$. Also we can see that since we fail to reject the null hypothesis for shock, we can not prove or disprove that shock has a relationship to panchayat-day. Since the original paper did not show their hypothesis testing for table 3, there is no way to see if there was a difference between our hypothesis testing results. 
+
+The Original paper had results that said "regressions of FwdWageFrac on an indicator for the shock along with time controls. The point estimates are insignificant and correspond to a 0.02 standard deviation change in project composition". Our table shows the $R^2$ which shows a very low significance level but through hypothesis testing we found out that panchayat-day shows a high significance with with the dependent variables $"FwdWageFrac"$ and the $Day$ and $Day^2$. But since for the variable $Shocks$ we could not prove or disprove for a relationship.  I believe that we have the same results as the original paper because they were measuring for a relationship between wage shocks and project composition. 
+\section{Appendix: R Code}
+\begin{verbatim}
+#Ze Zheng
+#Replication of Paper, Regression Table
+
+install.packages("epiDisplay")
+library(epiDisplay)
+library(rms)
+library(quantreg)
+library(car)
+library(AER)
+library(stargazer)
+
+rm(list=ls(all=TRUE))
+# directories
+
+#rootdir <- SET ROOT DIRECTORY HERE
+
+workingdir <- paste("/Users/andyz./Desktop/FEP", "Data", sep="/") # STORE DATA FILES AND HELPER FILES HERE
+tabledir <- paste("/Users/andyz./Desktop/FEP", "Tables", sep="/") # OUTPUT TABLES HERE
+figdir <- paste("/Users/andyz./Desktop/FEP", "Figures", sep="/") # OUTPUT FIGURES HERE
+
+
+setwd(workingdir)
+
+# helper functions
+# this does multi-way clustering a la Cameron-Gehlbach-Miller
+source("lib_mwc.r")
+
+# these two help with producing .tex tables
+source("lib_multiregtable.r")
+source("lib_hacktex.r")
+
+# this distributes amounts earned and days worked evenly between a given period when the exact days worked are not known
+source("[5-5-2008][v2] distributor_functions.R")
+
+usedata <- read.csv(paste(workingdir, "finalanalysisdata.csv", sep="/"))
+
+# label variables for output              
+varlabels <- pairlist("shock"               = "Shock",
+                      "shock_fdwfrac"       = "Shock * FwdWageFrac",
+                      "shock_bdwfrac"       = "Shock * BkWageFrac",
+                      "fdwfrac"             = "FwdWageFrac",
+                      "bdwfrac"             = "BkWageFrac",
+                      "month2"              = "April",
+                      "month3"              = "May",
+                      "month4"              = "June",
+                      "day"                 = "Day",
+                      "day2"                = "Day$^2$",
+                      "day3"                = "Day$^3$",
+                      "holiday"             = "Holiday",
+                      "season1"             = "Season 1",
+                      "season2"             = "Season 2",
+                      "res_gender"          = "Reserved (W)",
+                      "res_sbc"             = "Reserved (SBC)",
+                      "res_tribe"           = "Reserved (ST)",
+                      "shock_res_gender"    = "Shock * Reserved (W)",
+                      "shock_res_sbc"       = "Shock * Reserved (SBC)",
+                      "shock_res_tribe"     = "Shock * Reserved (ST)",
+                      "daysdw"              = "Actual DW Days",
+                      "ratepr"              = "Actual PR Payments",
+                      "shock_alwaysdw"      = "Shock * AlwaysDW",
+                      "shock_fdw_all"       = "Shock * FdwAll",
+                      "shock_fdw_some"      = "Shock * FdwSome",
+                      "shock_bdw_all"       = "Shock * BdwAll",
+                      "shock_bdw_some"      = "Shock * BdwSome",
+                      "shock_alwayspr"      = "Shock * AlwaysPR",
+                      "alwaysdw"            = "AlwaysDW",
+                      "alwayspr"            = "AlwaysPR",
+                      "month2fdw_all"       = "April * FdwAll",
+                      "month3fdw_all"       = "May * FdwAll",
+                      "month4fdw_all"       = "June * FdwAll",
+                      "shock_day"           = "Shock * Day")
+############# Table 2: Wage shock effects on Project Composition
+
+# dw fraction forward
+fm.fdwfrac.1 <- lm(fdwfrac ~ shock + day
+                    + holiday + res_gender + res_sbc + res_tribe + season1 + season2 + dayofmonth + dayofmonth2 + dayofmonth3, 
+                    data=usedata,x=TRUE, y=TRUE)
+
+#fm.fdwfrac.1$var <- mwc_2way(fm.fdwfrac.1, usedata$upid, usedata$day) 
+# Does not work due to lm(was ols before)  (mwc2_way only works with ols)
+#Why does it work with ols but not lm -_-, (-_Q),-_-||, ¯\_ಠ_ಠ_/¯
+fm.fdwfrac.2 <- lm(fdwfrac ~ shock + day + as.factor(did)
+                    + holiday + res_gender + res_sbc + res_tribe + season1 + season2 + dayofmonth + dayofmonth2 + dayofmonth3, 
+                    data=usedata,x=TRUE, y=TRUE)
+
+#fm.fdwfrac.2$var <- mwc_2way(fm.fdwfrac.2, usedata$upid, usedata$day)# Does not work due to lm(was ols before) (mwc2_way only works with ols) 
+#Why does it work with ols but not lm  -_-, (-_Q),-_-||, ¯\_ಠ_ಠ_/¯
+fm.fdwfrac.3 <- lm(fdwfrac ~ shock + day + day2 + as.factor(did)
+                    + holiday + res_gender + res_sbc + res_tribe + season1 + season2 + dayofmonth + dayofmonth2 + dayofmonth3, 
+                    data=usedata,x=TRUE, y=TRUE)
+
+#fm.fdwfrac.3$var <- mwc_2way(fm.fdwfrac.3, usedata$upid, usedata$day)  # Does not work due to lm(was ols before)  (mwc2_way only works with ols) 
+#Why does it work with ols but not lm  -_-, (-_Q),-_-||,¯\_ಠ_ಠ_/¯
+
+# For Hypothesis Testing 
+#Gives me the variables for column 1
+summary(fm.fdwfrac.1)
+#Gives me the variables for column 2
+summary(fm.fdwfrac.2)
+#Gives me the variables for column 3
+summary(fm.fdwfrac.3)
+
+
+
+#If I fail to reject to null hypothesis this means that 
+#I don't know (there can or cannot be) because we do not know if null = 0, 
+#Sample did not provide enough evidence to prove or disprove relationship
+
+confint(fm.fdwfrac.1)
+
+
+# normalized impacts
+coefficients(fm.fdwfrac.1)["shock"] / sd(usedata$fdwfrac, na.rm=T)
+
+# output
+#vars.end <- c("shock","day","day2")
+#addrows.end <- rbind(c("District FEs","N","Y","Y"))
+#table.end <- multiregtable(vars.end, varlabels, list(fm.fdwfrac.1, fm.fdwfrac.2, fm.fdwfrac.3), 3, addrows.end)
+
+#result <- hacktex(table.end, 
+                  #file=paste(tabledir, "fdwfrac.tex", sep="/"),
+                  #label="tab:fdwfrac",
+                  #table.env=FALSE,
+                  #caption.loc="top",
+                  #rowname =NULL,
+                  #center="none",
+                  #colheads=c("Regressor","I","II","III"),
+                  #collabel.just=c("l","c","c","c"))
+
+#package_version("rms")
+# ^^^^ Ignoring the top cant use it, manually typing in the variables using latex table
+
+stargazer(fm.fdwfrac.1, report="vcspt", type="text",
+          omit.stat = c("ser", "f")
+           ,omit.table.layout = "n") # adding confidence interval, killing note
+qt(0.95,df=12091) # df calculated by using summary 
+
+
+stargazer(fm.fdwfrac.2, report="vcspt", type="text",
+          omit.stat = c("ser", "f"),
+          omit.table.layout = "n") # adding confidence interval, killing note
+qt(0.95,df=12089) # df calculated by using summary 
+
+
+stargazer(fm.fdwfrac.3, report= "vcspt", type="text",
+          omit.stat = c("ser", "f")
+          , omit.table.layout = "n") # adding confidence interval, killing note
+qt(0.95,df=12088) # df calculated by using summary 
+
+
+
+
+
+\end{verbatim}
+
+\end{document}
